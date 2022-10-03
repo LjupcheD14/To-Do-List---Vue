@@ -90,7 +90,6 @@ const deleteTodo = id => {
 // toggle done
 
 const toggleDone = id => {
-  console.log('toggleDone', id)
   const index = todos.value.findIndex(todo => todo.id === id)
   todos.value[index].done = !todos.value[index].done
 }
