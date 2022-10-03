@@ -18,13 +18,13 @@
     </div>
 
     <div
-    v-for="i in 3"
+    v-for="todo in todos"
      class="card mb-5">
       <div class="card-content">
         <div class="content">
           <div class="columns is-mobile is-vcentered">
             <div class="column">
-              Train karate
+              {{todo.content}}
             </div>
             <div class="column is-5 has-text-right">
               <button class="button is-light">
@@ -45,6 +45,29 @@
   </div>
 
 </template>
+
+<script setup>
+
+  // imports
+  
+  import { ref } from 'vue';
+
+  // todos
+
+  const todos = ref ([
+    {
+      id: 'id1',
+      content: 'Train karate',
+      done: false
+    },
+    {
+      id: 'id2',
+      content: 'Train basket',
+      done: false
+    }
+  ])
+
+</script>
 
 <style>
 @import 'bulma/css/bulma.min.css';
