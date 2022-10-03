@@ -5,21 +5,29 @@
       Bubo ToDo
     </div>
 
+    <form
+      @submit.prevent="addTodo"
+    >
+      <div class="field is-grouped mb-5">
+        <p class="control is-expanded">
+          <input
+          v-model="newTodoContent" 
+          class="input" 
+          type="text" 
+          placeholder="Add a todo">
+        </p>
+        <p class="control">
+          <button 
+          :disabled="!newTodoContent"
+          class="button is-info"
+          >
+            Add
+          </button>
+        </p>
+      </div>
+    </form>
 
-    <div class="field is-grouped mb-5">
-      <p class="control is-expanded">
-        <input class="input" type="text" placeholder="Add a todo">
-      </p>
-      <p class="control">
-        <a class="button is-info">
-          Add
-        </a>
-      </p>
-    </div>
-
-    <div
-    v-for="todo in todos"
-     class="card mb-5">
+    <div v-for="todo in todos" class="card mb-5">
       <div class="card-content">
         <div class="content">
           <div class="columns is-mobile is-vcentered">
@@ -48,24 +56,39 @@
 
 <script setup>
 
-  // imports
-  
-  import { ref } from 'vue';
+// imports
 
-  // todos
+import { ref } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 
-  const todos = ref ([
-    {
-      id: 'id1',
-      content: 'Train karate',
-      done: false
-    },
-    {
-      id: 'id2',
-      content: 'Train basket',
-      done: false
-    }
-  ])
+// todos
+
+const todos = ref([
+  // {
+  //   id: 'id1',
+  //   content: 'Train karate',
+  //   done: false
+  // },
+  // {
+  //   id: 'id2',
+  //   content: 'Train basket',
+  //   done: false
+  // }
+])
+
+// add todo
+
+const newTodoContent = ref('')
+
+const addTodo = () => {
+  const newTodo = {
+    id: uuidv4(),
+    content: newTodoContent.value,
+    done: false
+  }
+  todos.value.unshift(newTodo)
+  newTodoContent.value = '';
+}
 
 </script>
 
