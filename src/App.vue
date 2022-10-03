@@ -49,23 +49,42 @@
 
 // imports
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 // todos
 
 const todos = ref([
-  {
-    id: 'id1',
-    content: 'Train karate',
-    done: false
-  },
-  {
-    id: 'id2',
-    content: 'Train basket',
-    done: true
-  }
+  // {
+  //   id: 'id1',
+  //   content: 'Train karate',
+  //   done: false
+  // },
+  // {
+  //   id: 'id2',
+  //   content: 'Train basket',
+  //   done: true
+  // }
 ])
+
+// get todos
+
+onMounted(async () => {
+  const querySnapshot = await getDocs(collection(db, 'todos'))
+  let fbTodos = []
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    const todo = {
+      id: doc.id,
+      content: doc.data().content,
+      done: doc.data().done
+    }
+    fbTodos.push(todo)
+  })
+  todos.value = fbTodos
+})
 
 // add todo
 
@@ -104,10 +123,12 @@ const toggleDone = id => {
   padding: 20px;
   margin: 0 auto;
 }
-.line-through{
+
+.line-through {
   text-decoration: line-through;
 }
-.has-background-success-light{
+
+.has-background-success-light {
   background-color: rgb(187, 255, 187) !important;
 }
 </style>
