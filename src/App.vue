@@ -50,12 +50,13 @@
 // imports
 
 import { ref, onMounted } from 'vue';
-import { collection, onSnapshot, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, doc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 // firebase ref
 
 const todosCollectionRef = collection(db, 'todos')
+const todosCollectionQuery = query(todosCollectionRef, orderBy('date', 'desc'))
 
 // todos
 
@@ -75,20 +76,7 @@ const todos = ref([
 // get todos
 
 onMounted(() => {
-  // const querySnapshot = await getDocs(collection(db, 'todos'))
-  // let fbTodos = []
-  // querySnapshot.forEach((doc) => {
-  //   console.log(doc.id, " => ", doc.data());
-  //   const todo = {
-  //     id: doc.id,
-  //     content: doc.data().content,
-  //     done: doc.data().done
-  //   }
-  //   fbTodos.push(todo)
-  // })
-  // todos.value = fbTodos
-
-  onSnapshot(todosCollectionRef, (querySnapshot) => {
+  onSnapshot(todosCollectionQuery, (querySnapshot) => {
     const fbTodos = [];
     querySnapshot.forEach((doc) => {
       const todo = {
@@ -99,6 +87,21 @@ onMounted(() => {
       fbTodos.push(todo)
     });
     todos.value = fbTodos
+
+    // const querySnapshot = await getDocs(collection(db, 'todos'))
+    // let fbTodos = []
+    // querySnapshot.forEach((doc) => {
+    //   console.log(doc.id, " => ", doc.data());
+    //   const todo = {
+    //     id: doc.id,
+    //     content: doc.data().content,
+    //     done: doc.data().done
+    //   }
+    //   fbTodos.push(todo)
+    // })
+    // todos.value = fbTodos
+
+
   });
 
 
@@ -111,7 +114,8 @@ const newTodoContent = ref('')
 const addTodo = () => {
   addDoc(todosCollectionRef, {
     content: newTodoContent.value,
-    done: false
+    done: false,
+    date: Date.now()
   });
   newTodoContent.value = '';
 }
